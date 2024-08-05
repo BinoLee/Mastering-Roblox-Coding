@@ -157,6 +157,73 @@ giveHapticFeedback(
     .5                           -- intensity
 )
 
+
+-- 7.3.3
+-- 마우스 클릭 감지
+local UserInputService = game:GetService("UserInputService")
+
+function inputBegan(inputObject, gameProcessedEvent)
+    print(inputObject.UserInputType)
+end
+
+UserInputService.InputBegan:Connect(inputBegan)
+
+-- 마우스 이벤트 전체 감지
+local UserInputService = game:GetService("UserInputService")
+
+function inputChanged(inputObject, gameProcessedEvent)
+    print(inputObject.UserInputType)
+end
+
+UserInputService.InputChanged:Connect(inputChanged)
+
+-- 마우스에 따라 프레임 변경
+local UserInputService = game:GetService("UserInputService")
+local ui = script.Parent
+local frame = ui:WaitForChild("Frame")
+
+function setup()
+    -- 마우스 연결 여부 확인
+    if UserInputService.MouseEnabled == true then
+        -- 마우스 입력 제어
+        local function listenToMouseInput(inputObject, gameProcessedEvent)
+            -- 로블록스에서 해당 이벤트 사용 여부 확인
+            if gameProcessedEvent == false then
+                if inputObject.UserInputType ==
+                    Enum.UserInputType.MouseMovement then
+                    -- 마우스 움직임
+                    repositionFrame()
+                elseif inputObject.UserInputType ==
+                    Enum.UserInputType.MouseButton1 then
+                    -- 마우스 왼쪽 버튼 클릭
+                    changeFrameColor()
+                end
+            end
+        end
+        -- .InputBegan 이벤트 감지
+        UserInputService.InputBegan:Connect(listenToMouseInput)
+        -- .InputChanged 이벤트 감지
+        UserInputService.InputChanged:Connect(listenToMouseInput)
+    end
+end
+
+function changeFrameColor()
+    local r = math.random(0, 255)
+    local g = math.random(0, 255)
+    local b = math.random(0, 255)
+    frame.BackgroundColor3 = Color3.fromRGB(r, g, b)
+end
+
+function repositionFrame()
+    -- 마우스 위치 감지
+    local mouseLocation = UserInputService:GetMouseLocation()
+    -- 프레임 위치 설정
+    frame.Position = UDim2.new(0, mouseLocation.X, 0, mouseLocation.Y)
+end
+
+setup()
+
+
 -- 7.3.4
 local Players = game:GetService("Players")
 local character = Players.LocalPlayer.Character
@@ -193,14 +260,11 @@ local humanoid = character:WaitForChild("Humanoid")
 --
 
 function setup()
-    -- Setting shopFrame invisible
     shopFrame.Visible = false
 
-    -- Listening to changes on the FloorMaterial property
+    -- FloorMaterial 속성 변경 감지
     humanoid:GetPropertyChangedSignal("FloorMaterial"):Connect(function()
-        -- Checking if player is standing on 'Foil'
-        -- We use this as a simple method to detect if a certain
-        -- condition is met
+        -- 플레이어의 위치가 Foil 위인지 확인
         if humanoid.FloorMaterial == Enum.Material.Foil then
             beginAction()
         else
@@ -210,37 +274,37 @@ function setup()
 end
 
 function beginAction()
-    -- Starting ContextAction
+    -- ContextAction 시작
     ContextActionService:BindAction(ACTION_NAME, toggleShop, true, Enum.KeyCode.E, Enum.KeyCode.ButtonX)
 
-    -- Changing Mobile Button
+    -- 모바일 버튼 변경
     ContextActionService:SetTitle(ACTION_NAME, "Shop")
     ContextActionService:SetPosition(ACTION_NAME, UDim2.new(1, -150, 1, -77))
 end
 
 function endAction()
-    -- Stopping ContextAction
+    -- ContextAction 중단
     ContextActionService:UnbindAction(ACTION_NAME)
 
-    -- Closing shop (if open)
+    -- 상점 종료(열려 있는 경우)
     closeShop()
 end
 
 --
 
 function toggleShop(actionName, inputState, inputObject)
-    -- Checking if this is the Begin action
+    -- 액션이 Begin인지 확인
     if inputState == Enum.UserInputState.Begin then
         Enum.UserInputState.
-        -- Toggling frame
+        -- 프레임 토글
         shopFrame.Visible = not shopFrame.Visible
     end
 end
 
 function closeShop()
-    -- Checking if shop is open
+    -- 상점이 열려 있는지 확인
     if shopFrame.Visible == true then
-        -- Closing shop
+        -- 상점 종료
         toggleShop(ACTION_NAME, Enum.UserInputState.Begin)
     end
 end
