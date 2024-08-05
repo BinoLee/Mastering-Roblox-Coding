@@ -8,10 +8,10 @@ local purchaseButton = screenGui:WaitForChild("PurchaseButton")
 
 function purchaseProduct()
 	MarketplaceService:PromptProductPurchase(
-		-- Player that will receive the prompt
+		-- 프롬프트를 볼 플레이어
 		Players.LocalPlayer,
 
-		-- Developer Product ID
+		-- 개발자 상품 ID
 		123456789
 	)
 end
@@ -33,15 +33,10 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local DataManager = require(PATH_TO_DATAMANAGER)
 
 local developerProducts = {
-	-- 500 money developer product
+	-- 500 게임 머니 개발자 상품
 	[123456789] = function(player)
-		-- Printing old money
 		print("old: " .. DataManager:Get(player, "money"))
-		
-		-- Rewarding developer product
 		DataManager:Increment(player, "money", 500)
-		
-		-- Printing new money
 		print("new: " .. DataManager:Get(player, "money"))
 	end
 }
@@ -49,36 +44,36 @@ local developerProducts = {
 --
 
 function processReceipt(receiptInfo)
-	-- Getting player
+	-- 플레이어 정보 받기
 	local userId = receiptInfo.PlayerId
 	local player = Players:GetPlayerByUserId(userId)
 	--
 	if player == nil or not player:IsDescendantOf(Players) then
-		-- Player is not in-game anymore
+		-- 플레이어가 게임 플레이 중이 아님
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	
-	-- Checking if developer product is programmed
+	-- 개발자 상품 구현 여부 확인
 	local purchasedDeveloperProduct = receiptInfo.ProductId
 	--
 	if developerProducts[purchasedDeveloperProduct] == nil then
-		-- Developer product was not programmed
+		-- 개발자 상품 미구현
 		warn("Developer Product [" .. purchasedDeveloperProduct .. "] was not programmed!")
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	
-	-- Rewarding developer product
+	-- 개발자 상품 혜택 지급
 	local suc, err = pcall(function()
 		developerProducts[purchasedDeveloperProduct](player)
 	end)
 	
-	-- Checking if reward was succesful
+	-- 혜택 지급 성공 여부 확인
 	if not suc then
-		-- An error occurred while trying to reward
+		-- 혜택 지급 중 오류 발생
 		warn(err)
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	else
-		-- Rewarding successful
+		-- 혜택 지급 성공
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	end
 end

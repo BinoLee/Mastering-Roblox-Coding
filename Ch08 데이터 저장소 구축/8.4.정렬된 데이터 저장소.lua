@@ -10,19 +10,19 @@ local LEADER_BOARD_SIZE = 25
 --
 
 function updatePlayer(player)
-	-- Getting coins
+	-- 코인 정보 찾기
 	local coins = nil
 	--
 	local suc, err = pcall(function()
 		coins = DataManager:Get(player, "coins")
 	end)
 	
-	-- Checking if data was retrieved
+	-- 데이터 수신 확인
 	if coins ~= nil then
-		-- Waiting for budget
+		-- 여유가 생길 때까지 대기
 		yieldUntilBudget(Enum.DataStoreRequestType.SetIncrementSortedAsync)
 
-		-- Saving data
+		-- 데이터 저장
 		local suc, err
 		repeat
 			suc, err = pcall(function()
@@ -41,13 +41,12 @@ function updatePlayer(player)
 end
 
 function printRichestPlayers()
-	-- Waiting for budget
+	-- 여유가 생길 때까지 대기
 	yieldUntilBudget(Enum.DataStoreRequestType.GetSortedAsync)
 	
-	-- Richest Players variable
 	local richest = {}
 	
-	-- Getting richest players
+	-- 가장 돈 많은 플레이어 찾기
 	local suc, err
 	repeat
 		suc, err = pcall(function()
@@ -56,17 +55,17 @@ function printRichestPlayers()
 			local page = pages:GetCurrentPage()
 			--
 			for rank, data in pairs(page) do
-				-- Declaring data
+				-- 데이터 선언
 				local userid = data.key
 				local coins = data.value
 				local username = "[ Account Deleted ]"
 				
-				-- Getting username
+				-- 사용자명 확인
 				pcall(function()
 					username = Players:GetNameFromUserIdAsync(userid)
 				end)
 				
-				-- Updating richest table
+				-- 순위 업데이트
 				richest[rank] = {["username"] = username, ["coins"] = coins}
 			end
 		end)
@@ -77,7 +76,7 @@ function printRichestPlayers()
 	until
 	suc
 	
-	-- Printing table
+	-- 테이블 출력
 	print(richest)
 end
 

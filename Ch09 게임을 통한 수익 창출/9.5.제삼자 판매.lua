@@ -6,10 +6,10 @@ local purchaseButton = screenGui:WaitForChild("PurchaseButton")
 
 function purchaseAvatarItem()
     MarketplaceService:PromptPurchase(
-        -- Player that will receive the prompt
+        -- 프롬프트를 볼 플레이어
         Players.LocalPlayer,
 
-        -- Avatar Item Id
+        -- 아바타 아이템 ID
         123456789
     )
 end

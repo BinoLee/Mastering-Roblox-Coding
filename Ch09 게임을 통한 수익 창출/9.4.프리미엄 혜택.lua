@@ -2,15 +2,15 @@ local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
 
 function promptPremium()
-	-- Getting player
+	-- 플레이어 정보 받기
 	local player = Players.LocalPlayer
 	
-	-- Checking if player owns Premium
+	-- 프리미엄 구독 여부 확인
 	if player.MembershipType ~= Enum.MembershipType.Premium then
-		-- Player is not subscribed to Premium
+		-- 프리미엄 미구독 중
 		MarketplaceService:PromptPremiumPurchase(player)
 	else
-		-- Player is subscribed to Premium
+		-- 프리미엄 구독 중
 		print("You are already subscribed!")
 	end
 end

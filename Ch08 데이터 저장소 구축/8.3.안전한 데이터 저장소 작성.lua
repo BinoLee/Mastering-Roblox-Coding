@@ -16,19 +16,19 @@ local playerData = {}
 -- PLAYER FUNCTIONS
 
 function playerJoined(player)
-	-- Getting and Caching data
+	-- 데이터 호출 및 캐시
 	playerData[player.Name] = get(player)
 	
-	-- Updating times_played
+	-- times_played 업데이트
 	playerData[player.Name]["times_played"] += 1
 	print(playerData[player.Name]["times_played"])
 end
 
 function playerLeft(player)
-	-- Saving data
+	-- 데이터 저장
 	save(player)
 	
-	-- Removing cached data
+	-- 캐시된 데이터 삭제
 	playerData[player.Name] = nil
 end
 
@@ -55,10 +55,10 @@ end
 function save(player)
 	local suc, err = pcall(function()
 		DataStore:SetAsync(
-			-- Key
+			-- 키
 			"Plr_" .. player.UserId,
 			
-			-- Cached data
+			-- 캐시된 데이터
 			playerData[player.Name]
 		)
 	end)
@@ -70,22 +70,20 @@ end
 -- TABLE FUNCTIONS
 
 function copyTable(toCopy)
-	-- Creating new copy table
 	local copy = {}
 	
-	-- Looping through toCopy table
+	-- toCopy 테이블 반복
 	for i, v in pairs(toCopy) do
-		-- Checking if value is a nested table/dictionary
+		-- 중첩된 테이블/딕셔너리 복사
 		if typeof(v) == "table" then
-			-- Copying nested table/dictionary
+			-- 중첩된 테이블/딕셔너리 복사
 			v = copyTable(v)
 		end
 		
-		-- Inserting value into copied table
+		-- 복사된 테이블에 값 입력
 		copy[i] = v
 	end
 	
-	-- Returning table copy
 	return copy
 end
 
@@ -115,19 +113,19 @@ local playerData = {}
 -- PLAYER FUNCTIONS
 
 function playerJoined(player)
-	-- Getting and Caching data
+	-- 데이터 호출 및 캐시
 	playerData[player.Name] = get(player)
 	
-	-- Updating times_played
+	-- times_played 업데이트
 	playerData[player.Name]["times_played"] += 1
 	print(playerData[player.Name]["times_played"])
 end
 
 function playerLeft(player)
-	-- Saving data
+	-- 데이터 저장
 	save(player)
 	
-	-- Removing cached data
+	-- 캐시된 데이터 삭제
 	playerData[player.Name] = nil
 end
 
@@ -135,14 +133,14 @@ end
 
 function autoSave()
 	while true do
-		-- Waiting auto-save interval
+		-- 자동 저장 간격만큼 대기
 		task.wait(AUTO_SAVE_INTERVAL)
 		
-		-- Getting players
+		-- 플레이어 정보 호출
 		for _, player in pairs(Players:GetPlayers()) do
-			-- Checking if data is cached
+			-- 데이터 캐시 여부 확인
 			if playerData[player.Name] ~= nil then
-				-- Auto-Saving
+				-- 자동 저장
 				task.spawn(function()
 					save(player)
 				end)
@@ -174,10 +172,10 @@ end
 function save(player)
 	local suc, err = pcall(function()
 		DataStore:SetAsync(
-			-- Key
+			-- 키
 			"Plr_" .. player.UserId,
 			
-			-- Cached data
+			-- 캐시된 데이터
 			playerData[player.Name]
 		)
 	end)
@@ -189,22 +187,19 @@ end
 -- TABLE FUNCTIONS
 
 function copyTable(toCopy)
-	-- Creating new copy table
 	local copy = {}
 	
-	-- Looping through toCopy table
+	-- toCopy 테이블 반복
 	for i, v in pairs(toCopy) do
-		-- Checking if value is a nested table/dictionary
 		if typeof(v) == "table" then
-			-- Copying nested table/dictionary
+			-- 중첩된 테이블/딕셔너리 복사
 			v = copyTable(v)
 		end
 		
-		-- Inserting value into copied table
+		-- 복사된 테이블에 값 입력
 		copy[i] = v
 	end
 	
-	-- Returning table copy
 	return copy
 end
 
@@ -236,19 +231,19 @@ local playerData = {}
 -- PLAYER FUNCTIONS
 
 function playerJoined(player)
-	-- Getting and Caching data
+	-- 데이터 호출 및 캐시
 	playerData[player.Name] = get(player)
 
-	-- Updating times_played
+	-- times_played 업데이트
 	playerData[player.Name]["times_played"] += 1
 	print(playerData[player.Name]["times_played"])
 end
 
 function playerLeft(player)
-	-- Saving data
+	-- 데이터 저장
 	save(player)
 
-	-- Removing cached data
+	-- 캐시된 데이터 삭제
 	playerData[player.Name] = nil
 end
 
@@ -256,14 +251,14 @@ end
 
 function autoSave()
 	while true do
-		-- Waiting auto-save interval
+		-- 자동 저장 간격만큼 대기
 		task.wait(AUTO_SAVE_INTERVAL)
 
-		-- Getting players
+		-- 플레이어 정보 호출
 		for _, player in pairs(Players:GetPlayers()) do
-			-- Checking if data is cached
+			-- 데이터 캐시 여부 확인
 			if playerData[player.Name] ~= nil then
-				-- Auto-Saving
+				-- 자동 저장
 				save(player)
 			end
 		end
@@ -282,10 +277,10 @@ function get(player)
 			loaded = DataStore:GetAsync("Plr_" .. player.UserId)
 		end)
 		if not suc then
-			-- Printing warning
+			-- 경고 출력
 			warn(err)
 
-			-- Small wait period in between retries
+			-- 재시도 전 잠시 대기
 			task.wait(6)
 		end
 	until
@@ -303,18 +298,18 @@ function save(player)
 	repeat
 		suc, err = pcall(function()
 			DataStore:SetAsync(
-				-- Key
+				-- 키
 				"Plr_" .. player.UserId,
 
-				-- Cached data
+				-- 캐시된 데이터
 				playerData[player.Name]
 			)
 		end)
 		if not suc then
-			-- Printing warning
+			-- 경고 출력
 			warn(err)
 			
-			-- Small wait period in between retries
+			-- 재시도 전 잠시 대기
 			task.wait(6)
 		end
 	until
@@ -325,22 +320,20 @@ end
 -- TABLE FUNCTIONS
 
 function copyTable(toCopy)
-	-- Creating new copy table
 	local copy = {}
 
-	-- Looping through toCopy table
+	-- toCopy 테이블 반복
 	for i, v in pairs(toCopy) do
-		-- Checking if value is a nested table/dictionary
 		if typeof(v) == "table" then
-			-- Copying nested table/dictionary
+			-- 중첩된 테이블/딕셔너리 복사
 			v = copyTable(v)
 		end
 
-		-- Inserting value into copied table
+		-- 복사된 테이블에 값 입력
 		copy[i] = v
 	end
 
-	-- Returning table copy
+	-- 테이블 복사 반환
 	return copy
 end
 
@@ -371,19 +364,19 @@ local playerData = {}
 -- PLAYER FUNCTIONS
 
 function playerJoined(player)
-	-- Getting and Caching data
+	-- 데이터 호출 및 캐시
 	playerData[player.Name] = get(player)
 
-	-- Updating times_played
+	-- times_played 업데이트
 	playerData[player.Name]["times_played"] += 1
 	print(playerData[player.Name]["times_played"])
 end
 
 function playerLeft(player)
-	-- Saving data
+	-- 데이터 저장
 	save(player)
 
-	-- Removing cached data
+	-- 캐시된 데이터 삭제
 	playerData[player.Name] = nil
 end
 
@@ -391,14 +384,14 @@ end
 
 function autoSave()
 	while true do
-		-- Waiting auto-save interval
+		-- 자동 저장 간격만큼 대기
 		task.wait(AUTO_SAVE_INTERVAL)
 
-		-- Getting players
+		-- 플레이어 정보 호출
 		for _, player in pairs(Players:GetPlayers()) do
-			-- Checking if data is cached
+			-- 데이터 캐시 여부 확인
 			if playerData[player.Name] ~= nil then
-				-- Auto-Saving
+				-- 자동 저장
 				save(player)
 			end
 		end
@@ -409,10 +402,10 @@ end
 -- DATA STORE FUNCTIONS
 
 function get(player)
-	-- Waiting for budget
+	-- 여유량이 생길 때까지 대기
 	yieldUntilBudget(Enum.DataStoreRequestType.Up)
 	
-	-- Getting data
+	-- 데이터 저장
 	local loaded = nil
 	local suc, err
 	--
@@ -421,10 +414,10 @@ function get(player)
 			loaded = DataStore:GetAsync("Plr_" .. player.UserId)
 		end)
 		if not suc then
-			-- Printing warning
+			-- 경고 출력
 			warn(err)
 
-			-- Small wait period in between retries
+			-- 재시도 전 잠시 대기
 			task.wait(6)
 		end
 	until
@@ -438,26 +431,26 @@ function get(player)
 end
 
 function save(player)
-	-- Waiting for budget
+	-- 여유량이 생길 때까지 대기
 	yieldUntilBudget(Enum.DataStoreRequestType.SetIncrementAsync)
 	
-	-- Saving data
+	-- 데이터 저장
 	local suc, err
 	repeat
 		suc, err = pcall(function()
 			DataStore:SetAsync(
-				-- Key
+				-- 키
 				"Plr_" .. player.UserId,
 
-				-- Cached data
+				-- 캐시된 데이터
 				playerData[player.Name]
 			)
 		end)
 		if not suc then
-			-- Printing warning
+			-- 경고 출력
 			warn(err)
 
-			-- Small wait period in between retries
+			-- 재시도 전 잠시 대기
 			task.wait(6)
 		end
 	until
@@ -476,22 +469,19 @@ end
 -- TABLE FUNCTIONS
 
 function copyTable(toCopy)
-	-- Creating new copy table
 	local copy = {}
 
-	-- Looping through toCopy table
+	-- toCopy 테이블 반복
 	for i, v in pairs(toCopy) do
-		-- Checking if value is a nested table/dictionary
 		if typeof(v) == "table" then
-			-- Copying nested table/dictionary
+			-- 중첩된 테이블/딕셔너리 복사
 			v = copyTable(v)
 		end
 
-		-- Inserting value into copied table
+		-- 복사된 테이블에 값 입력
 		copy[i] = v
 	end
 
-	-- Returning table copy
 	return copy
 end
 
@@ -533,58 +523,57 @@ end
 -- PUBLIC FUNCTIONS
 
 function DataManager:DataLoaded(player)
-	-- Checking if the data was loaded already
+	-- 데이터 로드 여부 확인
 	return playerData[player.Name] ~= nil
 end
 
 function DataManager:Get(player, key)
-	-- Checking if data is loaded
+	-- 데이터 로드 여부 확인
 	if DataManager:DataLoaded(player) ~= true then
 		error("[Data Not Loaded]: Use the DataManager.PlayerAdded event in favor of the Players.PlayerAdded event!")
 	end
 
-	-- Getting cached data
+	-- 캐시된 데이터 호출
 	local cachedData = playerData[player.Name]
 
-	-- Checking if key is valid
+	-- 키 유효성 확인
 	if cachedData[key] == nil then
 		error("[Invalid Key]: Key [" .. key .. "] does not exist.")
 	end
 
-	-- Returning data
 	return cachedData[key]
 end
 
 function DataManager:Set(player, key, value)
-	-- Checking if data is loaded
+	-- 데이터 로드 여부 확인
 	if DataManager:DataLoaded(player) ~= true then
 		error("[Data Not Loaded]: Use the DataManager.PlayerAdded event in favor of the Players.PlayerAdded event!")
 	end
 
-	-- Setting data
+	-- 데이터 설정
 	playerData[player.Name][key] = value
 end
 
 function DataManager:Increment(player, key, value)
-	-- Checking if data is loaded
+	-- 데이터 로드 여부 확인
 	if DataManager:DataLoaded(player) ~= true then
 		error("[Data Not Loaded]: Use the DataManager.PlayerAdded event in favor of the Players.PlayerAdded event!")
 	end
 
-	-- Getting cached data
+	-- 캐시된 데이터 호출
 	local cachedData = playerData[player.Name]
 
-	-- Checking if key is valid
+	-- 키 유효성 확인
 	if cachedData[key] == nil then
 		error("[Invalid Key]: Key [" .. key .. "] does not exist.")
 	end
 
-	-- Checking data type
+	-- 데이터 유형 확인
 	if typeof(cachedData[key]) ~= "number" then
 		error("[Invalid data type]: You can only use the :Increment() function on numbers. Consider using :Set().")
 	end
 
-	-- Incrementing
+	-- 데이터 증가
 	cachedData[key] += value
 end
 
@@ -592,18 +581,18 @@ end
 -- PLAYER FUNCTIONS
 
 function playerJoined(player)
-	-- Getting and Caching data
+	-- 데이터 호출 및 캐시
 	playerData[player.Name] = get(player)
 
-	-- Firing data loaded event
+	-- 데이터 로드 이벤트 발생
 	DataLoadedEvent:Fire(player)
 end
 
 function playerLeft(player)
-	-- Saving data
+	-- 데이터 저장
 	save(player)
 
-	-- Removing cached data
+	-- 캐시된 데이터 삭제
 	playerData[player.Name] = nil
 end
 
@@ -611,10 +600,10 @@ end
 -- DATABASE FUNCTIONS
 
 function get(player)
-	-- Waiting for budget
+	-- 여유량이 생길 때까지 대기
 	yieldUntilBudget(Enum.DataStoreRequestType.GetAsync)
 
-	-- Getting data
+	-- 데이터 저장
 	local loaded = nil
 	local suc, err
 	--
@@ -623,10 +612,10 @@ function get(player)
 			loaded = DataStore:GetAsync("Plr_" .. player.UserId)
 		end)
 		if not suc then
-			-- Printing warning
+			-- 경고 출력
 			warn(err)
 
-			-- Small wait period in between retries
+			-- 재시도 전 잠시 대기
 			task.wait(6)
 		end
 	until
@@ -640,26 +629,26 @@ function get(player)
 end
 
 function save(player)
-	-- Waiting for budget
+	-- 여유량이 생길 때까지 대기
 	yieldUntilBudget(Enum.DataStoreRequestType.SetIncrementAsync)
 
-	-- Saving data
+	-- 데이터 저장
 	local suc, err
 	repeat
 		suc, err = pcall(function()
 			DataStore:SetAsync(
-				-- Key
+				-- 키
 				"Plr_" .. player.UserId,
 				
-				-- Cached data
+				-- 캐시된 데이터
 				playerData[player.Name]
 			)
 		end)
 		if not suc then
-			-- Printing warning
+			-- 경고 출력
 			warn(err)
 
-			-- Small wait period in between retries
+			-- 재시도 전 잠시 대기
 			task.wait(6)
 		end
 	until
@@ -671,14 +660,14 @@ end
 
 function autoSave()
 	while true do
-		-- Waiting auto-save interval
+		-- 자동 저장 간격만큼 대기
 		task.wait(AUTO_SAVE_INTERVAL)
 
-		-- Getting players
+		-- 플레이어 정보 호출
 		for _, player in pairs(Players:GetPlayers()) do
-			-- Checking if data is cached
+			-- 데이터 캐시 여부 확인
 			if playerData[player.Name] ~= nil then
-				-- Auto-Saving
+				-- 자동 저장
 				task.spawn(function()
 					save(player)
 				end)
@@ -699,22 +688,19 @@ end
 -- TABLE FUNCTIONS
 
 function copyTable(toCopy)
-	-- Creating new copy table
 	local copy = {}
 
-	-- Looping through toCopy table
+	-- toCopy 테이블 반복
 	for i, v in pairs(toCopy) do
-		-- Checking if value is a nested table/dictionary
 		if typeof(v) == "table" then
-			-- Copying nested table/dictionary
+			-- 중첩된 테이블/딕셔너리 복사
 			v = copyTable(v)
 		end
 
-		-- Inserting value into copied table
+		-- 복사된 테이블에 값 입력
 		copy[i] = v
 	end
 
-	-- Returning table copy
 	return copy
 end
 
@@ -730,7 +716,7 @@ return DataManager
 
 -- 8.3.6
 SomeDataStore:UpdateAsync(
-	-- Key
+	-- 키
 	"Plr_" .. player.UserId,
 
 	-- Update function

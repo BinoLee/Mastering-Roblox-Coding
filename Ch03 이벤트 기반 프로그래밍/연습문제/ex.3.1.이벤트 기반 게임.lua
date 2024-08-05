@@ -1,13 +1,13 @@
 -- EXAMPLE SOLUTION
 
 --[[
-	This is the example answer for Chapter 3, Event-Based Programming.
+	이것은 3장, 이벤트 기반 프로그래밍의 예제 답안입니다.
 	
-	This script is an example solution to finish a game.
-	You can find the rest of the game here:
+	이 스크립트는 게임을 완성하기 위한 예제 솔루션입니다.
+	게임의 나머지 부분은 다음 링크에서 찾을 수 있습니다.
 	https://www.roblox.com/games/8645775042/Event-Based-Game
 
-	Press the 3 dots ◘◘◘ and click 'Edit' to open the game.
+	3 개의 점을 누르고 'Studio에서 편집'을 클릭하여 게임을 열 수 있습니다.
 --]]
 
 local Players = game:GetService("Players")
@@ -18,21 +18,19 @@ local map = workspace.Map
 --
 
 function setup()
-	-- Looping through all parts in the "Map" model in Workspace.
+	-- 워크스페이스의 "Map" 모델에 있는 모든 부분을 반복합니다.
 	for _, part in pairs(map:GetChildren()) do
 		
-		-- Checking if part is actually a part.
+		-- 파트가 실제로 파트인지 확인합니다.
 		if part:IsA("BasePart") then
 			
-			-- Listening to the .Touched event.
+			-- .Touched 이벤트에 연결합니다.
 			part.Touched:Connect(function(hit)
 				
-				-- Calling the handleHit() function.
+				-- handleHit() 함수를 호출합니다.
 				
-				-- @1 First argument is the part that was touched. The handleHit() function
-				-- needs this part to change the color.
-				
-				-- @2 The second argument is the part that touched the part.
+				-- @1 첫 번째 인수 part는 터치된 파트입니다. handleHit() 함수는 이 파트를 색칠합니다.				
+				-- @2 두 번째 인수 hit는 파트를 터치한 파트입니다.
 				
 				handleHit(part, hit)
 				
@@ -45,19 +43,19 @@ function setup()
 end
 
 function handleHit(part, hit)
-	-- Getting character
+	-- 캐릭터를 가져옵니다.
 	local character = hit.Parent
 	
-	-- Getting Player
+	-- 플레이어를 가져옵니다.
 	local player = Players:GetPlayerFromCharacter(character)
 	
-	-- Checking if player is not nil
+	-- 플레이어가 nil인지 확인합니다
 	if player ~= nil then
 		
-		-- Getting team color
+		-- 플레이어의 팀 색상을 가져옵니다.
 		local teamColor = player.Team.TeamColor
 		
-		-- Setting part color
+		-- 파트의 색상을 설정합니다.
 		part.BrickColor = teamColor
 		
 	end

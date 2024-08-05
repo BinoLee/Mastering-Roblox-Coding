@@ -7,10 +7,10 @@ local purchaseButton = screenGui:WaitForChild("PurchaseButton")
 
 function purchaseGamePass()
 	MarketplaceService:PromptGamePassPurchase(
-		-- Player that will receive the prompt
+		-- 프롬프트를 볼 플레어어
 		Players.LocalPlayer,
 
-		-- Game Pass Id
+		-- 게임 패스 ID
 		123456789
 	)
 end
@@ -38,13 +38,13 @@ local MarketplaceService = game:GetService("MarketplaceService")
 
 function purchaseFinished(player, gamePassId, purchased)
 	if purchased == true then
-		-- Getting game pass product info
+		-- 게임 패스 상품 정보 받아오기
 		local productInfo = MarketplaceService:GetProductInfo(
 			gamePassId,
 			Enum.InfoType.GamePass
 		)
 		
-		-- Printing message
+		-- 메시지 출력
 		print(
 			player.Name .. " just purchased a game pass"
 			.. " named [" .. productInfo.Name .. "]."
@@ -72,19 +72,19 @@ local gamePasses = {
 --
 
 function playerJoined(player)
-	-- Looping through all game passes
+	-- 게임 패스 전체 반복
 	for gamePassId, rewardFunction in pairs(gamePasses) do
-		-- Checking if game pass was purchased
+		-- 게임 패스 구매 여부 확인
 		if
 			MarketplaceService:UserOwnsGamePassAsync(
-				-- User Id
+				-- 사용자 ID
 				player.UserId,
 				
-				-- GamePass Id
+				-- 게임 패스 ID
 				gamePassId
 			)
 		then
-			-- Rewarding game pass
+			-- 게임 패스 혜택 지급
 			rewardFunction(player)
 		end
 	end
@@ -92,13 +92,13 @@ end
 
 function purchaseFinished(player, gamePassId, purchased)
 	if purchased == true then
-		-- Checking if game pass reward was programming
+		-- 게임 패스 혜택 구현 여부 확인
 		if gamePasses[gamePassId] == nil then
 			warn("GamePass [" .. gamePassId .. "] reward was not programmed")
 			return
 		end
 		
-		-- Rewarding game pass
+		-- 게임 패스 혜택 지급
 		gamePasses[gamePassId](player)
 	end
 end

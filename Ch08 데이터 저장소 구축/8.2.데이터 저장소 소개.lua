@@ -62,38 +62,37 @@ local REWARD_INTERVAL = 30
 local REWARD_AMOUNT = 10
 
 
--- PLAYER FUNCTIONS
+-- 플레이어 함수
 
 function playerJoined(player)
-	-- Creating Leaderstats
+	-- leaderstats 생성
 	createLeaderstats(player)
 	
-	-- Loading Data
+	-- 데이터 로드
 	local loadedCurrency = nil
 	
 	local suc, err = pcall(function()
-		-- Getting data store value
+		-- 데이터 저장소 값 찾기
 		loadedCurrency = CurrencyDataStore:GetAsync("Plr_" .. player.UserId)
 	end)
 	if not suc then
-		-- Printing error
+		-- 에러 출력
 		warn(err)
 		
-		-- Making leaderstat negative
+		-- leaderstat 값 음수화
 		incrementLeaderstat(player, "💸 Money", -(getLeaderstatValue(player, "💸 Money") + 1))
 		
-		-- Kicking player
+		-- 플레이어 강퇴
 		player:Kick("\n[Data Failed]\nFailed to load data. Please rejoin")
 	else
-		-- Setting default data
+		-- 기본값 설정
 		if loadedCurrency == nil then
 			loadedCurrency = STARTER_MONEY
 		end
 		
-		-- Setting leaderstat
+		-- leaderstat 설정
 		incrementLeaderstat(player, "💸 Money", loadedCurrency)
-		
-		-- Interval Money
+		 
 		enablePlayingReward(player)
 		print("Printed when the player left!")
 	end
@@ -115,7 +114,7 @@ function playerLeft(player)
 end
 
 
--- PLAYING REWARD
+-- 시간 보상
 
 function enablePlayingReward(player)
 	while player:IsDescendantOf(Players) do
@@ -125,7 +124,6 @@ function enablePlayingReward(player)
 end
 
 
--- LEADERSTAT FUNCTIONS
 
 function createLeaderstats(player)
 	local leaderstats = Instance.new("Model")

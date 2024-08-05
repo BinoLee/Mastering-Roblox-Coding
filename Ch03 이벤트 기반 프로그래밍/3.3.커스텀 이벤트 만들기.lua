@@ -163,7 +163,7 @@ local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 local CharacterEvents = require(ServerStorage.CharacterEvents)
 function playerJoined(player)
-    -- Listening to Jumped Event
+    -- Jumped 이벤트 감지
     CharacterEvents.Jumped(player):Connect(function()
         print(player.Name .. " jumped!")
     end)

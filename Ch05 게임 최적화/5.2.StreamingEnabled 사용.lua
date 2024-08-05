@@ -119,14 +119,14 @@ local partB = workspace.PartB
 local debounceValues = {}
 
 
--- TELEPORTING
+-- RequestStreamAroundAsync 함수
 
 function teleportPlayer(player, position)
     if playerHasDebounce(player) == false then
-        -- Preloading Area
+        -- 공간 미리 로드
         player:RequestStreamAroundAsync(position)
 
-        -- Teleporting player
+        -- 플레이어 순간이동
         player.Character:SetPrimaryPartCFrame(CFrame.new(position + Vector3.new(0, 5, 0)))
     end
 end
@@ -150,10 +150,10 @@ end
 --
 
 function wasHit(hit)
-    -- Getting Character
+    -- 캐릭터 확인
     local character = hit.Parent
     if character ~= nil then
-        -- Getting Player
+        -- 플레이어 확인
         local player = Players:GetPlayerFromCharacter(character)
         if player ~= nil then
             return player
@@ -162,7 +162,7 @@ function wasHit(hit)
     return false
 end
 
--- DEBOUNCE
+-- 디바운스
 
 function playerJoined(player)
     debounceValues[player.Name] = 0
