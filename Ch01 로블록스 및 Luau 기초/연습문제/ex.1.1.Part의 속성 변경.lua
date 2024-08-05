@@ -7,7 +7,7 @@ print(baseplate.Name)
 -- 5
 baseplate.Name = "Cool Part"
 
--- 6 (You could have changed the print that was made for 5.)
+-- 6
 print("The name of the baseplate is: '" .. baseplate.Name .. "'")
 
 -- 7
