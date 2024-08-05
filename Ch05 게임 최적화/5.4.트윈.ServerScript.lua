@@ -14,7 +14,7 @@ local debounceValues = {}
 function toggleGate(hit)
 	-- 서버 검사
 	local distance = ( hit.Position - gateActivation.Position ).Magnitude
-	if distance >= 10 then
+	if distance >= 25 then
 		return
 	end
 	
