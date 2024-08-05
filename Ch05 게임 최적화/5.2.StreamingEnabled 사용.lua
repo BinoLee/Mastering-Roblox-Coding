@@ -21,6 +21,48 @@ end
 
 -- 5.2.2.2
 -- 5.2.2.2 (1)
+local BLOCK_SIZE = 25
+local AMOUNT_OF_BLOCKS = 50
+
+local folder = Instance.new("Folder")
+folder.Name = "ColoredParts"
+folder.Parent = workspace
+
+for x = 1, AMOUNT_OF_BLOCKS do
+    for y = 1, AMOUNT_OF_BLOCKS do
+        local part = Instance.new("Part")
+        part.Parent = folder
+
+        part.Name = x .. ", " .. y
+        part.Anchored = true
+        part.Size = Vector3.new(BLOCK_SIZE, .25, BLOCK_SIZE)
+
+        local positionToCenter = ((BLOCK_SIZE * AMOUNT_OF_BLOCKS) / 2)
+        part.Position = Vector3.new(x * BLOCK_SIZE - positionToCenter, 1, y * BLOCK_SIZE - positionToCenter)
+    end
+    task.wait()
+end
+print("Command completed!")
+
+
+-- 5.2.2.2 (2)
+local coloredParts = workspace:WaitForChild("ColoredParts")
+function randomRGB()
+    local r = math.random(0, 255)
+    local g = math.random(0, 255)
+    local b = math.random(0, 255)
+    return Color3.fromRGB(r, g, b)
+end
+
+coloredParts.ChildAdded:Connect(function(addedInstance)
+    if addedInstance:IsA("BasePart") then
+        addedInstance.Color = randomRGB()
+        print("New instance colored!")
+    end
+end)
+
+
+-- 5.2.2.2 (3)
 local Players = game:GetService("Players")
 local partA = workspace.PartA
 local partB = workspace.PartB
@@ -64,48 +106,6 @@ end
 
 partA.Touched:Connect(teleportB)
 partB.Touched:Connect(teleportA)
-
-
-
-
-
-
--- 전체 코드
-local BLOCK_SIZE = 25
-local AMOUNT_OF_BLOCKS = 50
-local folder = Instance.new("Folder")
-folder.Name = "ColoredParts"
-folder.Parent = workspace
-for x = 1, AMOUNT_OF_BLOCKS do
-    for y = 1, AMOUNT_OF_BLOCKS do
-        local part = Instance.new("Part")
-        part.Parent = folder
-        part.Name = x .. ", " .. y
-        part.Anchored = true
-        part.Size = Vector3.new(BLOCK_SIZE, .25,
-            BLOCK_SIZE)
-        local positionToCenter = ((BLOCK_SIZE * AMOUNT_OF_BLOCKS) / 2)
-        part.Position = Vector3.new(x * BLOCK_SIZE - positionToCenter, 1, y * BLOCK_SIZE - positionToCenter)
-    end
-    task.wait()
-end
-print("Command completed!")
-
--- 5.2.2.2 (2)
-local coloredParts = workspace:WaitForChild("ColoredParts")
-function randomRGB()
-    local r = math.random(0, 255)
-    local g = math.random(0, 255)
-    local b = math.random(0, 255)
-    return Color3.fromRGB(r, g, b)
-end
-
-coloredParts.ChildAdded:Connect(function(addedInstance)
-    if addedInstance:IsA("BasePart") then
-        addedInstance.Color = randomRGB()
-        print("New instance colored!")
-    end
-end)
 
 -- 5.2.2.3
 -- 5.2.2.3 (1)
